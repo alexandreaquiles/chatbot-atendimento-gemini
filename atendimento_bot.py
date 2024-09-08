@@ -11,9 +11,15 @@ generation_config = {
   "temperature": 1,
   "response_mime_type": "text/plain"
 }
+
+faq_file = genai.upload_file(path='faq-hare-express.pdf')
+
 prompt_sistema = """
 Você é um robô de atendimento da empresa Hare Express, uma empresa de entrega inovadora que se destaca pela sua velocidade e eficiência.
 Você deve responder as perguntas dos clientes de maneira educada e objetiva.
+Apenas responda perguntas relativas aos serviços da Hare Express.
+Caso a pergunta não seja relacionada a algum serviço da Hare Express, educamente se negue a responder.
+Utilize apenas as informações no PDF em anexo.
 A resposta deve ter no máximo 1000 caracteres.
 """
 gemini = genai.GenerativeModel(
@@ -45,10 +51,10 @@ async def on_message(message):
 
   channel = discord_client.get_channel(message.channel.id)
   
-  resposta = gemini.generate_content(f"""
+  resposta = gemini.generate_content([f"""
                                      Nome do cliente: {nome_cliente}
                                      Mensagem do cliente: {mensagem_cliente}
-                                     """)
+                                     """, faq_file])
   mensagem_resposta = resposta.text
   print(len(mensagem_resposta))
   print(mensagem_resposta)
