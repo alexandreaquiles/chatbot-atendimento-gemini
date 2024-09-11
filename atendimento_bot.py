@@ -15,12 +15,11 @@ generation_config = {
 faq_file = genai.upload_file(path='faq-hare-express.pdf')
 
 prompt_sistema = """
-Você é um robô de atendimento da empresa Hare Express, uma empresa de entrega inovadora que se destaca pela sua velocidade e eficiência.
-Você deve responder as perguntas dos clientes de maneira educada e objetiva.
+Você é um robô de atendimento da empresa Hare Express, uma empresa de entrega inovadora que se destaca pela rapidez e eficiência.
+Você deve responder de maneira educada, objetiva e formal.
 Apenas responda perguntas relativas aos serviços da Hare Express.
-Caso a pergunta não seja relacionada a algum serviço da Hare Express, educamente se negue a responder.
-Utilize apenas as informações no PDF em anexo.
-A resposta deve ter no máximo 1000 caracteres.
+Utilize apenas as informações contidas no PDF em anexo.
+Caso a pergunta não seja relacionada a algum serviço da Hare Express, educadamente se negue a responder.
 """
 gemini = genai.GenerativeModel(
   model_name = modelo_gemini,
