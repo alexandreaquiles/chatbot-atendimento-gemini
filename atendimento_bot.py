@@ -2,6 +2,7 @@ import os
 import discord
 from dotenv import load_dotenv
 import google.generativeai as genai
+from correios_rastreamento import busca_info_rastreamento
 
 load_dotenv()
 
@@ -24,7 +25,8 @@ Caso a pergunta não seja relacionada a algum serviço da Hare Express, educadam
 gemini = genai.GenerativeModel(
   model_name = modelo_gemini,
   generation_config=generation_config,
-  system_instruction = prompt_sistema)
+  system_instruction = prompt_sistema,
+  tools=[busca_info_rastreamento])
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -50,13 +52,16 @@ async def on_message(message):
 
   channel = discord_client.get_channel(message.channel.id)
   
-  resposta = gemini.generate_content([f"""
+  chat = gemini.start_chat(enable_automatic_function_calling=True)
+  resposta = chat.send_message([f"""
                                      Nome do cliente: {nome_cliente}
                                      Mensagem do cliente: {mensagem_cliente}
                                      """, faq_file])
+  # print(resposta)
+  # print(resposta.text)
   mensagem_resposta = resposta.text
-  print(len(mensagem_resposta))
-  print(mensagem_resposta)
+  # print(len(mensagem_resposta))
+  # print(mensagem_resposta)
   await channel.send(mensagem_resposta)
 
 discord_client.run(os.getenv('DISCORD_CLIENT_TOKEN'))
