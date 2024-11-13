@@ -9,7 +9,7 @@ load_dotenv()
 modelo_gemini = "gemini-1.5-flash"
 genai.configure(api_key=os.environ["GEMINI_API_KEY"])
 generation_config = {
-  "temperature": 1,
+  "temperature": 0,
   "response_mime_type": "text/plain"
 }
 
